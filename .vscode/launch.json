@@ -11,10 +11,10 @@
             "program": "lib/controller.dart"
         },
         {
-            "name": "cnc (profile mode)",
+            "name": "cnc (debug mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "debug"
         },
         {
             "name": "cnc (release mode)",

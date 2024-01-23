@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 
 import '../model/machine_model.dart';
+import '../widgets/machine_widget.dart';
 
-class MachineView extends StatefulWidget {
+class MachinesView extends StatefulWidget {
   final Machine machine;
-  const MachineView({super.key, required this.machine});
+  const MachinesView(this.machine, {super.key});
 
   @override
-  State<MachineView> createState() => _MachineViewState();
+  State<MachinesView> createState() => _MachinesViewState();
 }
 
-class _MachineViewState extends State<MachineView> {
+class _MachinesViewState extends State<MachinesView> {
+  Stream? stream;
   @override
   Widget build(BuildContext context) {
+    stream ??= widget.machine.stream;
     return StreamBuilder(
-        stream: widget.machine.stream,
+        stream: stream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -23,7 +26,7 @@ class _MachineViewState extends State<MachineView> {
             case ConnectionState.waiting:
               return const Center(child: CircularProgressIndicator());
             case ConnectionState.active:
-              return Center(child: Text(snapshot.data.toString()));
+              return Center(child: MachineWidget(snapshot.data));
             case ConnectionState.done:
               return const Center(child: Text('All done.'));
           }

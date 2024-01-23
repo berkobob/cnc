@@ -6,14 +6,23 @@ import 'package:cnc/model/machine_model.dart';
 import '../services/log.dart';
 
 class Controller {
-  Stream<Machine> get stream async* {
+  final List<Machine> _machines = List.empty(growable: true);
+
+  Stream<List<Machine>> get stream async* {
     final server = await ServerSocket.bind(InternetAddress.anyIPv4, port);
-    log.info('Server runnig on ${server.address}');
+    log.info('Server running on ${server.address}');
     await for (Socket socket in server) {
-      yield Machine(socket);
+      yield _machines..add(Machine(socket));
     }
   }
 
-  final int port;
-  Controller([this.port = 1234]);
+  int port = 1234;
+
+  static final Controller _controller = Controller._internal();
+
+  factory Controller() {
+    return _controller;
+  }
+
+  Controller._internal();
 }

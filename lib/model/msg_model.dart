@@ -8,6 +8,7 @@ class Msg {
   double idle;
   String cpu;
   String mem;
+  String address;
 
   Msg(Map<String, dynamic> data)
       : name = data['name'],
@@ -18,7 +19,8 @@ class Msg {
         uptime = double.parse(data['uptime']),
         idle = double.parse(data['idle']),
         cpu = data['cpu'],
-        mem = data['mem'] {
+        mem = data['mem'],
+        address = data['address'] {
     final int memString = int.parse(mem);
     mem = '${(memString / 1000000).round()}M';
   }
