@@ -1,8 +1,8 @@
 class Msg {
   String name;
-  String temp;
+  double temp;
   String os;
-  int clock;
+  double clock;
   int throttle;
   double uptime;
   double idle;
@@ -12,9 +12,9 @@ class Msg {
 
   Msg(Map<String, dynamic> data)
       : name = data['name'],
-        temp = data['temp'],
+        temp = double.parse(data['temp']),
         os = data['os'],
-        clock = int.parse(data['clock']),
+        clock = double.parse(data['clock']),
         throttle = int.parse(data['throttle']),
         uptime = double.parse(data['uptime']),
         idle = double.parse(data['idle']),
@@ -23,6 +23,7 @@ class Msg {
         address = data['address'] {
     final int memString = int.parse(mem);
     mem = '${(memString / 1000000).round()}M';
+    clock = clock / 100000000;
   }
 
   @override

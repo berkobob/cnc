@@ -51,12 +51,12 @@ class MachineWidget extends StatelessWidget {
             Text(msg.os, maxLines: 1, overflow: TextOverflow.clip),
             Text(msg.cpu, maxLines: 1, overflow: TextOverflow.fade)
           ]),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Temp(),
-              Clock(),
-              Uptime(),
+              Temp(msg.temp),
+              Clock(msg.clock),
+              const Uptime(),
             ],
           ),
           // Text(

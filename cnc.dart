@@ -86,6 +86,7 @@ Future buildPayload(Map<String, dynamic> payload) async {
   final result = await Future.wait(futures);
 
   payload['temp'] = result[0].stdout.trim().split('=')[1];
+  payload['temp'] = payload['temp'].substring(0, payload['temp'].length - 2);
   payload['clock'] = result[1].stdout.trim().split('=')[1];
   payload['throttle'] = result[2].stdout.trim().split('=')[1];
   payload['uptime'] = result[3].trim().split(' ')[0];

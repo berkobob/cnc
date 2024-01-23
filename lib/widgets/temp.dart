@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class Temp extends StatelessWidget {
-  const Temp({super.key});
+  const Temp(this.temp, {super.key});
+  final double temp;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class Temp extends StatelessWidget {
           LinearGaugeRange(startValue: 60.0, endValue: 80.0, color: Colors.red)
         ],
         // barPointers: [LinearBarPointer(value: 50)],
-        markerPointers: const [LinearShapePointer(value: 50.0)],
+        markerPointers: [LinearShapePointer(value: temp)],
         axisLabelStyle: const TextStyle(fontSize: 10.0),
         tickPosition: LinearElementPosition.outside,
       ),

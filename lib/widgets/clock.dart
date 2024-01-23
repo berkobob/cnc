@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class Clock extends StatelessWidget {
-  const Clock({super.key});
+  const Clock(this.clock, {super.key});
+  final double clock;
 
   @override
   Widget build(BuildContext context) {
@@ -14,13 +15,13 @@ class Clock extends StatelessWidget {
           minimum: 5,
           maximum: 30,
           ranges: <GaugeRange>[
-            GaugeRange(startValue: 5.0, endValue: 10.0, color: Colors.yellow),
-            GaugeRange(startValue: 10.0, endValue: 20.0, color: Colors.green),
-            GaugeRange(startValue: 20.0, endValue: 30.0, color: Colors.red),
+            GaugeRange(startValue: 5.0, endValue: 12.5, color: Colors.yellow),
+            GaugeRange(startValue: 12.5, endValue: 22.5, color: Colors.green),
+            GaugeRange(startValue: 22.5, endValue: 30.0, color: Colors.red),
           ],
-          pointers: const <GaugePointer>[
+          pointers: <GaugePointer>[
             NeedlePointer(
-              value: 20,
+              value: clock,
               needleEndWidth: 5.0,
             )
           ],
