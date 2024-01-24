@@ -1,7 +1,5 @@
-import 'package:cnc/widgets/machine_widget.dart';
 import 'package:flutter/material.dart';
 
-import 'model/msg_model.dart';
 import 'services/scroll_behaviour.dart';
 import 'view/home_view.dart';
 
@@ -34,18 +32,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         useMaterial3: true,
       ),
-      // home: Scaffold(
-      //   body: Container(
-      //     margin: const EdgeInsets.fromLTRB(127.0, 26.0, 127.0, 93.0),
-      //     width: 260,
-      //     height: 260,
-      //     child: MachineWidget(
-      //       Msg(json),
-      //     ),
-      //   ),
-      // ),
       home: Container(
           margin: const EdgeInsets.fromLTRB(127.0, 26.0, 127.0, 93.0),
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: const HomePage()),
     );
   }

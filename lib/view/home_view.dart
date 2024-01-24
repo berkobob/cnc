@@ -10,7 +10,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Controller();
     return Scaffold(
-      appBar: AppBar(title: const Text('Is this working')),
+      // appBar: AppBar(title: const Text('Is this working')),
       body: StreamBuilder(
           stream: controller.stream,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -21,7 +21,6 @@ class HomePage extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               case ConnectionState.active:
                 return ControllerView(snapshot.data);
-              // return Center(child: MachineView(machine: snapshot.data));
               case ConnectionState.done:
                 return const Center(child: Text('All done.'));
             }

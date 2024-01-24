@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import "dart:convert";
 
@@ -8,7 +10,7 @@ void main() async {
 
   while (socket == null) {
     socket = await connect();
-    await Future.delayed(Duration(seconds: 5));
+    await Future.delayed(const Duration(seconds: 5));
   }
   payload['address'] = socket.address.address;
 
@@ -25,7 +27,7 @@ void main() async {
     } catch (error) {
       print('Failed to send payload: $error');
     }
-    await Future.delayed(Duration(seconds: 20));
+    await Future.delayed(const Duration(seconds: 20));
   }
 }
 
@@ -67,7 +69,7 @@ Future<Socket?> connect() async {
 Future<Map<String, dynamic>> init() async {
   final name = Platform.localHostname;
   final rawOs = await readOs('/etc/os-release');
-  final os = rawOs[0].split('=')[1].replaceAll('\"', '');
+  final os = rawOs[0].split('=')[1].replaceAll('"', '');
   final file = await readOs('/proc/cpuinfo');
   final cpu = file[file.length - 2].split(':')[1].trim();
   final file2 = await readOs('/proc/meminfo');

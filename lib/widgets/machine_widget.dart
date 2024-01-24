@@ -42,8 +42,8 @@ class MachineWidget extends StatelessWidget {
               const Spacer(flex: 2),
               const Row(children: [
                 Icon(Icons.power, color: Colors.red),
+                Icon(Icons.access_time, color: Colors.green),
                 Icon(Icons.thermostat, color: Colors.yellow),
-                Icon(Icons.access_time, color: Colors.green)
               ])
             ],
           ),
