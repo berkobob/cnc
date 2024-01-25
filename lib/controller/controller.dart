@@ -9,7 +9,8 @@ class Controller {
   final List<Machine> _machines = List.empty(growable: true);
 
   Stream<List<Machine>> get stream async* {
-    final server = await ServerSocket.bind(InternetAddress.anyIPv4, port);
+    final server =
+        await ServerSocket.bind(InternetAddress.anyIPv4, port, shared: false);
     log.info('Server running on ${server.address}');
     await for (Socket socket in server) {
       yield _machines..add(Machine(socket));

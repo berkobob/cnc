@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
 
 class Uptime extends StatelessWidget {
-  const Uptime({super.key});
+  final (String, String) time;
+  const Uptime(this.time, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
+    return SizedBox(
       height: 125.0,
       child: Column(
         mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            '4D',
-            textScaler: TextScaler.linear(1.75),
-          ),
-          Text(
-            '10%',
-            textScaler: TextScaler.linear(1.5),
-          )
+          Text(time.$1,
+              style: const TextStyle(
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              )),
+          Text(time.$2,
+              style: const TextStyle(
+                fontSize: 15.0,
+                fontWeight: FontWeight.normal,
+                color: Colors.black,
+              )),
         ],
       ),
     );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../model/msg_model.dart';
 import 'clock.dart';
 import 'temp.dart';
+import 'throttling.dart';
 import 'uptime.dart';
 
 class MachineWidget extends StatelessWidget {
@@ -23,48 +24,44 @@ class MachineWidget extends StatelessWidget {
               blurRadius: 2.5,
             )
           ]),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.computer),
-              const Spacer(flex: 1),
-              Column(
-                children: [
-                  Text(
-                    msg.name,
-                    textScaler: const TextScaler.linear(1.5),
-                  ),
-                  Text(msg.address),
-                ],
-              ),
-              const Spacer(flex: 2),
-              const Row(children: [
-                Icon(Icons.power, color: Colors.red),
-                Icon(Icons.access_time, color: Colors.green),
-                Icon(Icons.thermostat, color: Colors.yellow),
-              ])
-            ],
-          ),
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Row(children: [
+          const Icon(Icons.computer),
+          const Spacer(flex: 1),
           Column(children: [
-            Text(msg.os, maxLines: 1, overflow: TextOverflow.clip),
-            Text(msg.cpu, maxLines: 1, overflow: TextOverflow.fade)
+            Text(
+              msg.name,
+              style:
+                  const TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
+            ),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Text(msg.address),
+              const Text('\t'),
+              Text(msg.mem),
+            ]),
           ]),
-          Row(
+          const Spacer(flex: 2),
+          Throttling(
+              frequency: msg.frequency,
+              overheat: msg.overheat,
+              voltage: msg.voltage)
+        ]),
+        Column(children: [
+          Text(msg.os, maxLines: 1, overflow: TextOverflow.clip),
+          Text(msg.cpu, maxLines: 1, overflow: TextOverflow.fade)
+        ]),
+        Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Temp(msg.temp),
+              Uptime(
+                msg.uptimeText,
+              ),
               Clock(msg.clock),
-              const Uptime(),
-            ],
-          ),
-          // Text(
-          //   'Is there another row',
-          //   textScaler: TextScaler.linear(1.17),
-          // )
-        ],
-      ),
+            ]),
+      ]),
     );
   }
 }

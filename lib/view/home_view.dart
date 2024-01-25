@@ -18,11 +18,12 @@ class HomePage extends StatelessWidget {
               case ConnectionState.none:
                 return const Center(child: Text('No connection state'));
               case ConnectionState.waiting:
-                return const Center(child: CircularProgressIndicator());
+                return const Center(child: Text('No devices'));
               case ConnectionState.active:
                 return ControllerView(snapshot.data);
               case ConnectionState.done:
-                return const Center(child: Text('All done.'));
+                return const Center(
+                    child: Text('Fatal Crash. Socket server closed'));
             }
           }),
     );
