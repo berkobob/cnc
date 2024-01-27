@@ -72,7 +72,7 @@ Future<Socket?> connect(String host) async {
 Future<Map<String, dynamic>> init() async {
   final name = Platform.localHostname;
   final rawOs = await readOs('/etc/os-release');
-  final os = rawOs[0].split('=')[1].replaceAll('\"', '');
+  final os = rawOs[0].split('=')[1].replaceAll('"', '');
   final file = await readOs('/proc/cpuinfo');
   final cpu = file[file.length - 2].split(':')[1].trim();
   final file2 = await readOs('/proc/meminfo');

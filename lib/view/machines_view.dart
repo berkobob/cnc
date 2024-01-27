@@ -26,9 +26,12 @@ class _MachinesViewState extends State<MachinesView> {
             case ConnectionState.waiting:
               return const Center(child: CircularProgressIndicator());
             case ConnectionState.active:
+              widget.machine.lastMsg = snapshot.data;
               return Center(child: MachineWidget(snapshot.data));
             case ConnectionState.done:
-              return const Center(child: Text('All done.'));
+              return Center(
+                  child: Text(
+                      'Connection from ${widget.machine.lastMsg?.name} at ${widget.machine.lastMsg?.address} lost.\n${widget.machine.lastMsg}'));
           }
         });
   }

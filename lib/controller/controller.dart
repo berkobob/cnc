@@ -13,7 +13,19 @@ class Controller {
         await ServerSocket.bind(InternetAddress.anyIPv4, port, shared: false);
     log.info('Server running on ${server.address}');
     await for (Socket socket in server) {
-      yield _machines..add(Machine(socket));
+      int index = _machines.indexWhere((machine) =>
+          machine.lastMsg?.address == socket.remoteAddress.address);
+
+      if (index > -1) {
+        await _machines[index].socket.close();
+        _machines[index].socket = socket;
+        // _machines.removeAt(index);
+      } else {
+        _machines.add(Machine(socket));
+      }
+
+      yield _machines;
+      // yield [Machine(socket)];
     }
   }
 

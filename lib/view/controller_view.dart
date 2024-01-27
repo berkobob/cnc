@@ -9,16 +9,16 @@ class ControllerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('building contollerview with ${machines.length} machines.');
     return GridView.builder(
-      itemCount: machines.length,
-      scrollDirection: Axis.horizontal,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 25.0,
-        crossAxisSpacing: 25.0,
-      ),
-      itemBuilder: (BuildContext context, index) =>
-          MachinesView(machines[index]),
-    );
+        itemCount: machines.length,
+        scrollDirection: Axis.horizontal,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          mainAxisSpacing: 25.0,
+          crossAxisSpacing: 25.0,
+        ),
+        itemBuilder: (BuildContext context, index) =>
+            MachinesView(machines[index]));
   }
 }
