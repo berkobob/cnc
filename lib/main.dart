@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'controller/controller.dart';
 import 'services/scroll_behaviour.dart';
 import 'view/home_view.dart';
 
@@ -33,9 +35,13 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: Container(
-          // margin: const EdgeInsets.fromLTRB(127.0, 26.0, 127.0, 93.0),
-          padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: const HomePage()),
+        // margin: const EdgeInsets.fromLTRB(127.0, 26.0, 127.0, 93.0),
+        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        child: ChangeNotifierProvider<Controller>(
+          create: (context) => Controller(),
+          child: const HomePage(),
+        ),
+      ),
     );
   }
 }

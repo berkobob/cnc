@@ -1,31 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../controller/controller.dart';
-import 'controller_view.dart';
+import 'machines_view.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Controller();
+    final machines = Provider.of<Controller>(context).machines;
+
     return Scaffold(
       // appBar: AppBar(title: const Text('Is this working')),
-      body: StreamBuilder(
-          stream: controller.stream,
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-                return const Center(child: Text('No connection state'));
-              case ConnectionState.waiting:
-                return const Center(child: Text('No devices'));
-              case ConnectionState.active:
-                return ControllerView(snapshot.data);
-              case ConnectionState.done:
-                return const Center(
-                    child: Text('Fatal Crash. Socket server closed'));
-            }
-          }),
+      body: machines.isEmpty
+          ? const Center(child: Text('No machines'))
+          : GridView.builder(
+              itemCount: machines.length,
+              scrollDirection: Axis.horizontal,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 25.0,
+                crossAxisSpacing: 25.0,
+              ),
+              itemBuilder: (BuildContext context, index) =>
+                  MachinesView(machines[index]),
+            ),
     );
   }
 }

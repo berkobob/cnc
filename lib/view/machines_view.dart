@@ -12,10 +12,34 @@ class MachinesView extends StatefulWidget {
 }
 
 class _MachinesViewState extends State<MachinesView> {
-  Stream? stream;
+  late Stream stream;
+
+  @override
+  void initState() {
+    super.initState();
+    print('in init state');
+    stream = widget.machine.stream;
+  }
+
+  @override
+  void didUpdateWidget(MachinesView machinesView) {
+    super.didUpdateWidget(machinesView);
+    machinesView.machine.socket.destroy();
+    print(stream == widget.machine.stream);
+    print(stream == machinesView.machine.stream);
+    stream == widget.machine.stream;
+    // stream = machinesView.machine.stream;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print('Does dispose happen');
+    widget.machine.socket.destroy();
+  }
+
   @override
   Widget build(BuildContext context) {
-    stream ??= widget.machine.stream;
     return StreamBuilder(
         stream: stream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -29,6 +53,7 @@ class _MachinesViewState extends State<MachinesView> {
               widget.machine.lastMsg = snapshot.data;
               return Center(child: MachineWidget(snapshot.data));
             case ConnectionState.done:
+              // Provider.of<Controller>(context).kill(widget.machine);
               return Center(
                   child: Text(
                       'Connection from ${widget.machine.lastMsg?.name} at ${widget.machine.lastMsg?.address} lost.\n${widget.machine.lastMsg}'));
