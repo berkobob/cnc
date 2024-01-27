@@ -12,14 +12,14 @@ class Temp extends StatelessWidget {
       width: 40.0,
       child: SfLinearGauge(
         orientation: LinearGaugeOrientation.vertical,
-        minimum: 20.0,
-        maximum: 80.0,
+        minimum: 30.0,
+        maximum: 90.0,
         ranges: const <LinearGaugeRange>[
           LinearGaugeRange(
-              startValue: 0.0, endValue: 40.0, color: Colors.green),
+              startValue: 0.0, endValue: 50.0, color: Colors.green),
           LinearGaugeRange(
-              startValue: 40.0, endValue: 60.0, color: Colors.yellow),
-          LinearGaugeRange(startValue: 60.0, endValue: 80.0, color: Colors.red)
+              startValue: 50.0, endValue: 70.0, color: Colors.yellow),
+          LinearGaugeRange(startValue: 70.0, endValue: 90.0, color: Colors.red)
         ],
         // barPointers: [LinearBarPointer(value: 50)],
         markerPointers: [LinearShapePointer(value: temp)],

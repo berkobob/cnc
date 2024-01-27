@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: Container(
-          margin: const EdgeInsets.fromLTRB(127.0, 26.0, 127.0, 93.0),
+          // margin: const EdgeInsets.fromLTRB(127.0, 26.0, 127.0, 93.0),
           padding: const EdgeInsets.symmetric(vertical: 10.0),
           child: const HomePage()),
     );

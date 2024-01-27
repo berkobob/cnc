@@ -15,7 +15,7 @@ class Msg {
         temp = double.parse(data['temp']),
         os = data['os'],
         clock = double.parse(data['clock']),
-        throttle = int.parse(data['throttle']),
+        throttle = int.parse(data['throttle'].substring(2), radix: 16),
         uptime = double.parse(data['uptime']),
         idle = double.parse(data['idle']),
         cpu = data['cpu'],
@@ -24,50 +24,37 @@ class Msg {
     final int memString = int.parse(mem);
     mem = '${(memString / 1000000).round()}M';
     clock = clock / 100000000;
-    print(throttle);
-    if (throttle & 0x1 != 0) {
-      print('Under-voltage detected!');
-    }
-    if (throttle & 0x2 != 0) {
-      print('Arm frequency capped!');
-    }
-    if (throttle & 0x4 != 0) {
-      print('Currently throttled!');
-    }
-    if (throttle & 0x8 != 0) {
-      print('Soft temperature limit active!');
-    }
-    if (throttle & 0x80 != 0) {
-      print('Under-voltage has occurred since last reboot!');
-    }
-    if (throttle & 0x100 != 0) {
-      print('Throttling has occurred since last reboot!');
-    }
-    if (throttle & 0x200 != 0) {
-      print('Arm frequency capped has occurred since last reboot!');
-    }
-    if (throttle & 0x400 != 0) {
-      print('Soft temperature limit has occurred since last reboot!');
-    }
   }
 
-  ThrottleState get voltage => throttle & 0x1 != 0
-      ? ThrottleState.now
-      : throttle & 0x80 != 0
-          ? ThrottleState.previously
-          : ThrottleState.none;
+  static const isVolts = 0x1;
+  static const isFreq = 0x2;
+  static const _isThrottled = 0x4;
+  static const isHot = 0x8;
+  static const wasVolts = 0x10000;
+  static const wasFreq = 0x20000;
+  static const _wasThrottled = 0x40000;
+  static const wasHot = 0x80000;
 
-  ThrottleState get frequency => throttle & 0x2 != 0
-      ? ThrottleState.now
-      : throttle & 0x200 != 0
-          ? ThrottleState.previously
-          : ThrottleState.none;
+  bool get isThrottled => throttle & _isThrottled == 0 ? false : true;
+  bool get wasThrottled => throttle & _wasThrottled == 0 ? false : true;
 
-  ThrottleState get overheat => throttle & 0x8 != 0
-      ? ThrottleState.now
-      : throttle & 0x400 != 0
-          ? ThrottleState.previously
-          : ThrottleState.none;
+  ThrottleState get voltage => throttle & wasVolts == 0
+      ? ThrottleState.none
+      : throttle & isVolts == 0
+          ? ThrottleState.was
+          : ThrottleState.now;
+
+  ThrottleState get frequency => throttle & wasFreq == 0
+      ? ThrottleState.none
+      : throttle & isFreq == 0
+          ? ThrottleState.was
+          : ThrottleState.now;
+
+  ThrottleState get overheat => throttle & wasHot == 0
+      ? ThrottleState.none
+      : throttle & isHot == 0
+          ? ThrottleState.was
+          : ThrottleState.now;
 
   String get idleText => ((uptime - idle) / uptime * 100).toStringAsFixed(1);
 
@@ -88,4 +75,4 @@ class Msg {
       'Name: $name, Temp: $temp, OS: $os, CPU: $cpu, MEM: $mem, Clock: $clock, Throttle: $throttle, Uptime: $uptime, Idle: $idle';
 }
 
-enum ThrottleState { none, now, previously }
+enum ThrottleState { none, now, was }

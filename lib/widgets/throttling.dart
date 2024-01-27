@@ -25,6 +25,6 @@ class Throttling extends StatelessWidget {
   Color color(ThrottleState state) => switch (state) {
         ThrottleState.none => Colors.green,
         ThrottleState.now => Colors.red,
-        ThrottleState.previously => Colors.yellow,
+        ThrottleState.was => Colors.black,
       };
 }
