@@ -19,13 +19,16 @@ class Controller extends ChangeNotifier {
         .then((server) async {
       log.info('Server running on ${server.address}');
       server.listen((socket) {
-        try {
-          final Machine machine = machines.firstWhere((machine) =>
-              machine.socket.remoteAddress.address ==
-              socket.remoteAddress.address);
-          machines.remove(machine);
-        } catch (_) {}
-        machines.add(Machine(socket));
+        final int index = machines.indexWhere((machine) =>
+            machine.socket.remoteAddress.address ==
+            socket.remoteAddress.address);
+
+        if (index == -1) {
+          machines.add(Machine(socket));
+        } else {
+          machines.removeAt(index);
+          machines.insert(index, Machine(socket));
+        }
         notifyListeners();
       });
     });

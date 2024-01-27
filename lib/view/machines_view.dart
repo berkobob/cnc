@@ -17,24 +17,22 @@ class _MachinesViewState extends State<MachinesView> {
   @override
   void initState() {
     super.initState();
-    print('in init state');
     stream = widget.machine.stream;
   }
 
   @override
-  void didUpdateWidget(MachinesView machinesView) {
-    super.didUpdateWidget(machinesView);
-    machinesView.machine.socket.destroy();
-    print(stream == widget.machine.stream);
-    print(stream == machinesView.machine.stream);
-    stream == widget.machine.stream;
-    // stream = machinesView.machine.stream;
+  void didUpdateWidget(MachinesView oldMachinesView) {
+    super.didUpdateWidget(oldMachinesView);
+
+    if (oldMachinesView.machine != widget.machine) {
+      oldMachinesView.machine.socket.destroy();
+      stream = widget.machine.stream;
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
-    print('Does dispose happen');
     widget.machine.socket.destroy();
   }
 
@@ -54,9 +52,10 @@ class _MachinesViewState extends State<MachinesView> {
               return Center(child: MachineWidget(snapshot.data));
             case ConnectionState.done:
               // Provider.of<Controller>(context).kill(widget.machine);
-              return Center(
-                  child: Text(
-                      'Connection from ${widget.machine.lastMsg?.name} at ${widget.machine.lastMsg?.address} lost.\n${widget.machine.lastMsg}'));
+              return MachineWidget(snapshot.data, inactive: true);
+            // Center(
+            //     child: Text(
+            //         'Connection from ${widget.machine.lastMsg?.name} at ${widget.machine.lastMsg?.address} lost.\n${widget.machine.lastMsg}'));
           }
         });
   }

@@ -7,12 +7,19 @@ import 'throttling.dart';
 import 'uptime.dart';
 
 class MachineWidget extends StatelessWidget {
-  const MachineWidget(this.msg, {super.key});
+  const MachineWidget(this.msg, {this.inactive = false, super.key});
   final Msg msg;
+  final bool inactive;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      foregroundDecoration: inactive
+          ? const BoxDecoration(
+              color: Colors.grey,
+              backgroundBlendMode: BlendMode.saturation,
+            )
+          : null,
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
       decoration: BoxDecoration(
           border: Border.all(color: Colors.black),
