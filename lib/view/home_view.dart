@@ -15,17 +15,15 @@ class HomePage extends StatelessWidget {
       // appBar: AppBar(title: const Text('Is this working')),
       body: machines.isEmpty
           ? const Center(child: Text('No machines'))
-          : GridView.builder(
-              itemCount: machines.length,
+          : GridView.count(
+              crossAxisCount: 2,
               scrollDirection: Axis.horizontal,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 25.0,
-                crossAxisSpacing: 25.0,
-              ),
-              itemBuilder: (BuildContext context, index) =>
-                  MachinesView(machines[index]),
-            ),
+              mainAxisSpacing: 25.0,
+              crossAxisSpacing: 25.0,
+              addAutomaticKeepAlives: true,
+              cacheExtent: double.maxFinite,
+              children:
+                  machines.map((machine) => MachinesView(machine)).toList()),
     );
   }
 }

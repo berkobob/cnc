@@ -1,13 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 
-final log = Logger('Log');
+void logging() {
+  Logger.root.level = Level.ALL; // defaults to Level.INFO
 
-class Log {
-  Log() {
-    Logger.root.level = Level.ALL; // defaults to Level.INFO
-    Logger.root.onRecord.listen((record) {
-      debugPrint('${record.level.name}: ${record.time}: ${record.message}');
-    });
-  }
+  Logger.root.onRecord.listen((record) {
+    debugPrint('${record.level.name}: ${record.loggerName}: ${record.message}');
+  });
 }

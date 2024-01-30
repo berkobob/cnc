@@ -2,8 +2,9 @@ import 'dart:io';
 
 import 'package:cnc/model/machine_model.dart';
 import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
 
-import '../services/log.dart';
+final log = Logger('Controller');
 
 class Controller extends ChangeNotifier {
   final List<Machine> machines = List.empty(growable: true);
@@ -24,10 +25,14 @@ class Controller extends ChangeNotifier {
             socket.remoteAddress.address);
 
         if (index == -1) {
-          machines.add(Machine(socket));
+          machines.add(Machine(socket,
+              alert:
+                  'A new machine is joining the party from ${socket.remoteAddress.address}'));
         } else {
+          final name = machines[index].lastMsg?.name;
           machines.removeAt(index);
-          machines.insert(index, Machine(socket));
+          machines.insert(index,
+              Machine(socket, alert: 'Good news. $name is back with us'));
         }
         notifyListeners();
       });
