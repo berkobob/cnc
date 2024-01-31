@@ -1,49 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 
-import '../model/machine_model.dart';
+import '../model/device.dart';
 import '../widgets/machine_widget.dart';
 
 final log = Logger('MachinesView');
 
-class MachinesView extends StatefulWidget {
-  final Machine machine;
-  const MachinesView(this.machine, {super.key});
+class DeviceView extends StatefulWidget {
+  final Device device;
+  const DeviceView(this.device, {super.key});
 
   @override
-  State<MachinesView> createState() => _MachinesViewState();
+  State<DeviceView> createState() => _DeviceViewState();
 }
 
-class _MachinesViewState extends State<MachinesView>
+class _DeviceViewState extends State<DeviceView>
     with AutomaticKeepAliveClientMixin {
-  late Machine machine;
+  late Device device;
   late Stream stream;
 
   @override
   void initState() {
     super.initState();
-    machine = widget.machine;
-    stream = machine.stream;
-  }
-
-  @override
-  void didUpdateWidget(MachinesView oldMachinesView) {
-    log.fine('in didUpdateWidget: ${machine.lastMsg?.name}');
-    super.didUpdateWidget(oldMachinesView);
-
-    if (oldMachinesView.machine != widget.machine) {
-      oldMachinesView.machine.socket.destroy();
-      machine = widget.machine;
-      stream = machine.stream;
-      log.fine('A new machine');
-    }
+    device = widget.device;
+    stream = device.stream;
   }
 
   @override
   void dispose() {
     super.dispose();
     try {
-      machine.socket.destroy();
+      device.close;
     } catch (e) {
       log.finer(e);
     }
@@ -61,21 +48,29 @@ class _MachinesViewState extends State<MachinesView>
             case ConnectionState.waiting:
               return const Center(child: CircularProgressIndicator());
             case ConnectionState.active:
-              machine.lastMsg = snapshot.data;
-              if (machine.alert != null) {
-                final string = machine.alert!;
-                machine.alert = null;
-                _showSnackbar(context: context, string: string);
+              if (snapshot.hasError) {
+                log.shout('Snapshot has error ${snapshot.error}');
+                _showSnackbar(context: context, string: '${snapshot.error}');
+                return const Center(child: CircularProgressIndicator());
               }
+              log.shout('Snapshot has no error ${snapshot.error}');
+
+              if (snapshot.hasData)
+                log.shout('Snapshot has data ${snapshot.data}');
+              // device.lastMsg = snapshot.data;
+              // if (device.alert != null) {
+              //   final string = device.alert!;
+              //   device.alert = null;
+              //   _showSnackbar(context: context, string: string);
+              // }
               return Center(
                   child: GestureDetector(
-                      onTap: () => machine.shutdown(),
+                      onLongPress: () => device.shutdown(),
                       child: MachineWidget(snapshot.data)));
             case ConnectionState.done:
               _showAlert(
                   context: context,
-                  string:
-                      'Connection to ${machine.lastMsg?.name} has been lost');
+                  string: 'Connection to ${device.name} has been lost');
               return snapshot.data == null
                   ? const Placeholder()
                   : MachineWidget(snapshot.data, inactive: true);
@@ -99,11 +94,11 @@ class _MachinesViewState extends State<MachinesView>
   }
 
   void _showSnackbar({required BuildContext context, required String string}) {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(string),
-      ));
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(string),
+    ));
+    // });
   }
 
   @override

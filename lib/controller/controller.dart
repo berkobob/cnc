@@ -19,6 +19,7 @@ class Controller extends ChangeNotifier {
     ServerSocket.bind(InternetAddress.anyIPv4, 1234, shared: false)
         .then((server) async {
       log.info('Server running on ${server.address}');
+
       server.listen((socket) {
         final int index = machines.indexWhere((machine) =>
             machine.socket.remoteAddress.address ==

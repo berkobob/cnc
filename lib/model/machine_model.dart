@@ -13,6 +13,7 @@ class Machine {
   String? alert;
 
   Stream get stream => socket.asBroadcastStream().transform(JsonConverter());
+
   Machine(this.socket, {this.alert}) {
     log.info('A new machine has connected from ${socket.remoteAddress}');
   }
