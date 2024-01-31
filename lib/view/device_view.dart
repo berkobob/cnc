@@ -37,6 +37,15 @@ class _DeviceViewState extends State<DeviceView>
   }
 
   @override
+  void didUpdateWidget(oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (device.isClosed) {
+      device = widget.device;
+      stream = device.stream;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
     return StreamBuilder(
@@ -48,21 +57,13 @@ class _DeviceViewState extends State<DeviceView>
             case ConnectionState.waiting:
               return const Center(child: CircularProgressIndicator());
             case ConnectionState.active:
-              if (snapshot.hasError) {
-                log.shout('Snapshot has error ${snapshot.error}');
-                _showSnackbar(context: context, string: '${snapshot.error}');
-                return const Center(child: CircularProgressIndicator());
+              if (device.first) {
+                _showSnackbar(
+                    context: context,
+                    string:
+                        'A new connection is joining the party from ${device.address}');
+                device.first = false;
               }
-              log.shout('Snapshot has no error ${snapshot.error}');
-
-              if (snapshot.hasData)
-                log.shout('Snapshot has data ${snapshot.data}');
-              // device.lastMsg = snapshot.data;
-              // if (device.alert != null) {
-              //   final string = device.alert!;
-              //   device.alert = null;
-              //   _showSnackbar(context: context, string: string);
-              // }
               return Center(
                   child: GestureDetector(
                       onLongPress: () => device.shutdown(),
@@ -86,7 +87,6 @@ class _DeviceViewState extends State<DeviceView>
             Future.delayed(
                 const Duration(seconds: 3), () => Navigator.of(context).pop());
             return AlertDialog(
-              // title: const Text('A new message'),
               content: Text(string),
             );
           });
@@ -94,11 +94,11 @@ class _DeviceViewState extends State<DeviceView>
   }
 
   void _showSnackbar({required BuildContext context, required String string}) {
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(string),
-    ));
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(string),
+      ));
+    });
   }
 
   @override

@@ -12,6 +12,7 @@ class Device {
   final Socket _socket;
   final StreamController<Msg> _deviceController = StreamController<Msg>();
 
+  bool first = true;
   String? name;
   final String address;
   Stream<Msg> get stream => _deviceController.stream;
@@ -24,9 +25,8 @@ class Device {
         _deviceController.add(msg);
       },
       onError: (error) => log.finer(error.toString()),
-      onDone: () => log.finer('$this is done'),
+      onDone: () => _deviceController.close(),
     );
-    _deviceController.addError('A new device is joing the party from $address');
   }
 
   Future close() async {
@@ -36,6 +36,8 @@ class Device {
   void shutdown() {
     log.finest('Shutting down $name');
   }
+
+  bool get isClosed => _deviceController.isClosed;
 
   @override
   String toString() => 'Name: $name, Address: $address';

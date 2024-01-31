@@ -14,7 +14,14 @@ class Devices {
   Devices() {
     _server.stream.listen((Device device) {
       log.info('New device: $device');
-      _devices.add(device);
+      final int index =
+          _devices.indexWhere((each) => each.address == device.address);
+      if (index == -1) {
+        _devices.add(device);
+      } else {
+        _devices.removeAt(index);
+        _devices.insert(index, device);
+      }
       _controller.add(_devices);
       log.fine('Added $device to devices. Now ${_devices.length} devices');
     });
