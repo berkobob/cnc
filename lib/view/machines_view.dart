@@ -14,7 +14,8 @@ class MachinesView extends StatefulWidget {
   State<MachinesView> createState() => _MachinesViewState();
 }
 
-class _MachinesViewState extends State<MachinesView> {
+class _MachinesViewState extends State<MachinesView>
+    with AutomaticKeepAliveClientMixin {
   late Stream stream;
 
   @override
@@ -45,6 +46,7 @@ class _MachinesViewState extends State<MachinesView> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return StreamBuilder(
         stream: stream,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -98,4 +100,7 @@ class _MachinesViewState extends State<MachinesView> {
       ));
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
