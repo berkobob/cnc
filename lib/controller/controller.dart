@@ -38,10 +38,4 @@ class Controller extends ChangeNotifier {
       });
     });
   }
-
-  void kill(Machine machine) {
-    machines.remove(machine);
-    machine.socket.close();
-    notifyListeners();
-  }
 }

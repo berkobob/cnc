@@ -16,21 +16,26 @@ class MachinesView extends StatefulWidget {
 
 class _MachinesViewState extends State<MachinesView>
     with AutomaticKeepAliveClientMixin {
+  late Machine machine;
   late Stream stream;
 
   @override
   void initState() {
     super.initState();
-    stream = widget.machine.stream;
+    machine = widget.machine;
+    stream = machine.stream;
   }
 
   @override
   void didUpdateWidget(MachinesView oldMachinesView) {
+    log.fine('in didUpdateWidget: ${machine.lastMsg?.name}');
     super.didUpdateWidget(oldMachinesView);
 
     if (oldMachinesView.machine != widget.machine) {
       oldMachinesView.machine.socket.destroy();
-      stream = widget.machine.stream;
+      machine = widget.machine;
+      stream = machine.stream;
+      log.fine('A new machine');
     }
   }
 
@@ -38,7 +43,7 @@ class _MachinesViewState extends State<MachinesView>
   void dispose() {
     super.dispose();
     try {
-      widget.machine.socket.destroy();
+      machine.socket.destroy();
     } catch (e) {
       log.finer(e);
     }
@@ -56,21 +61,21 @@ class _MachinesViewState extends State<MachinesView>
             case ConnectionState.waiting:
               return const Center(child: CircularProgressIndicator());
             case ConnectionState.active:
-              widget.machine.lastMsg = snapshot.data;
-              if (widget.machine.alert != null) {
-                final string = widget.machine.alert!;
-                widget.machine.alert = null;
+              machine.lastMsg = snapshot.data;
+              if (machine.alert != null) {
+                final string = machine.alert!;
+                machine.alert = null;
                 _showSnackbar(context: context, string: string);
               }
               return Center(
                   child: GestureDetector(
-                      onTap: () => widget.machine.shutdown(),
+                      onTap: () => machine.shutdown(),
                       child: MachineWidget(snapshot.data)));
             case ConnectionState.done:
               _showAlert(
                   context: context,
                   string:
-                      'Connection to ${widget.machine.lastMsg?.name} has been lost');
+                      'Connection to ${machine.lastMsg?.name} has been lost');
               return snapshot.data == null
                   ? const Placeholder()
                   : MachineWidget(snapshot.data, inactive: true);
